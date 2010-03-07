@@ -24,9 +24,6 @@ feature
 
 			create answer_text.make_from_c (answer.data)
 			print ("%NReceived answer: "+answer_text)
-			--create answer_text.from_external(answer.data)
-			--("Received answer: '"+answer_text+"'. (Note: DbC says that concatenating into ropes with '|' triggers some bugs; Paolo solve them!) %N").print_on(std_output)
-
 		end
 end -- CLIENT
 
