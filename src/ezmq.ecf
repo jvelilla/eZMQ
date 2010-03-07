@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-4-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-4-0 http://www.eiffel.com/developers/xml/configuration-1-4-0.xsd" name="ezmq" uuid="CA4EDE49-9779-4562-96EB-5F8FF13AF770" library_target="ezmq">
+	<target name="ezmq">
+		<root all_classes="true"/>
+		<option debug="false" warning="true" syntax_level="1">
+			<debug name="__unnamed_debug__" enabled="true"/>
+			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
+		</option>
+		<setting name="address_expression" value="true"/>
+		<setting name="console_application" value="true"/>
+		<setting name="dead_code_removal" value="false"/>
+		<setting name="exception_trace" value="true"/>
+		<external_include location="/home/jvelilla/work/project/Eiffel/ezmq/src/Clib">
+			<condition>
+				<platform excluded_value="windows"/>
+			</condition>
+		</external_include>
+		<external_object location="`pkg-config --libs --cflags libzmq`">
+			<condition>
+				<platform excluded_value="windows"/>
+				<multithreaded value="false"/>
+			</condition>
+		</external_object>
+		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
+		<library name="time" location="$ISE_LIBRARY\library\time\time.ecf" readonly="true"/>
+		
+		<cluster name="ezmq" location=".\" recursive="true">
+			<option debug="true">
+			</option>
+			<file_rule>
+				<exclude>/EIFGENs$</exclude>
+				<exclude>/.svn$</exclude>
+				<exclude>/CVS$</exclude>
+			</file_rule>
+			<file_rule>
+				<exclude>^/zmq$</exclude>
+			</file_rule>
+			<cluster name="zmq" location=".\zmq\" recursive="true">
+				<file_rule>
+					<exclude>/EIFGENs$</exclude>
+					<exclude>/.svn$</exclude>
+					<exclude>/CVS$</exclude>
+				</file_rule>
+			</cluster>
+		</cluster>
+	</target>
+</system>
