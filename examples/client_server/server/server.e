@@ -8,8 +8,8 @@ class
 	-- Port of the server of the simple example at http://www.zeromq.org/area:docs-v20
 creation {} make
 feature
-	make is
-		local rc: INTEGER_32; ctx: ZMQ_CONTEXT; s: ZMQ_SOCKET; query, answer: ZMQ_MESSAGE
+	make
+		local ctx: ZMQ_CONTEXT; s: ZMQ_SOCKET; query, answer: ZMQ_MESSAGE
 			content: STRING
 		do
 			create ctx
@@ -30,6 +30,6 @@ feature
 			end
 
 		end
-		answer_body: STRING is "OK"
+		answer_body: STRING = "OK"
 
 end -- class SERVER

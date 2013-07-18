@@ -3,51 +3,13 @@ note
 	author: ""
 	date: "$Date$"
 	revision: "$Revision$"
+	EIS : "name=Socket Types", "src=http://api.zeromq.org/3-3:zmq-socket", "protocol=uri"
 
 deferred class ZMQ_SOCKET_TYPES
 	-- ØMQ socket types
 	inherit ANY undefine copy, is_equal end
-feature {} -- Socket types
-	zmq_p2p: INTEGER_32 is
-		-- A socket type to  communicate with a single peer. Allows for only
-		-- a single connect or a single bind. There's no message  routing or
-		-- message filtering involved.
-        -- Compatible peer sockets: ZMQ_P2P.
-		external
-	                "C inline use <zmq.h>"
-		alias "{
-				ZMQ_P2P
-		}"
-		end
-
-	zmq_pub: INTEGER_32 is
-		-- A socket type to  distribute  data. Recv fuction is not
-		-- implemented for this socket type.  Messages  are  distributed  in
-		-- fanout fashion to all the peers.
-
-		-- Compatible peer sockets: ZMQ_SUB.
-		external
-	                "C inline use <zmq.h>"
-		alias "{
-	            ZMQ_PUB
-		}"
-		end
-
-	zmq_sub: INTEGER_32 is
-		-- A socket type to  subscribe  for  data. Send function is not
-		-- implemented for this socket type. Initially, socket is
-		-- subscribed for  no  messages.  Use ZMQ_SUBSCRIBE option to
-		-- specify which messages to subscribe for.
-
-		-- Compatible peer sockets: ZMQ_PUB.
-		external
-	                "C inline use <zmq.h>"
-		alias "{
-			 ZMQ_SUB
-		}"
-		end
-
-	zmq_req: INTEGER_32 is
+feature {} -- Socket types : Request-Replay Pattern
+zmq_req: INTEGER_32
 		-- A socket type to send requests and  receive  replies.  Requests
 		-- are load-balanced  among  all  the peers. This socket type allows
 		-- only an alternated sequence of send's and recv's.
@@ -60,7 +22,7 @@ feature {} -- Socket types
 		}"
 		end
 
-	zmq_rep: INTEGER_32 is
+	zmq_rep: INTEGER_32
 		-- A socket type to receive requests and send replies. This socket
 		-- type allows only an alternated sequence of recv's and send's.
 		-- Each send is routed to the peer  that  issued  the  last
@@ -74,56 +36,73 @@ feature {} -- Socket types
 		}"
 		end
 
-	zmq_xreq: INTEGER_32 is
-		-- A special  socket  type to be used in request/reply middleboxes
-		-- such as zmq_queue(7).  Requests forwarded using  this  socket
-		-- type  should  be  tagged  by  a proper postix identifying the
-		-- original requester.  Replies  received  by  this  socket  are
-		-- tagged  with  a  proper  postfix that can be use to route the
-		-- reply back to the original requester.
 
-		-- Compatible peer sockets: ZMQ_REP, ZMQ_XREP.
+zmq_router: INTEGER_32
+		--A socket of type ZMQ_ROUTER is an advanced socket type used for extending request/reply sockets.
+		--When receiving messages a ZMQ_ROUTER socket shall prepend a message part containing the identity of
+		--the originating peer to the message before passing it to the application.
+		--Messages received are fair-queued from among all connected peers.
+		--When sending messages a ZMQ_ROUTER socket shall remove the first part of the message and use
+		--it to determine the identity of the peer the message shall be routed to.
+		--If the peer does not exist anymore the message shall be silently discarded by default,
+		--unless ZMQ_ROUTER_BEHAVIOR socket option is set to 1.
+
+		-- Deprecated alias: ZMQ_XREP.
+		-- Compatible peer sockets 	ZMQ_DEALER, ZMQ_REQ, ZMQ_ROUTER.
 		external
 	                "C inline use <zmq.h>"
 		alias "{
-			 ZMQ_XREQ
+			 ZMQ_ROUTER
 		}"
 		end
 
-	zmq_xrep: INTEGER_32 is
-		-- A special socket type to be used in  request/reply  middleboxes such  as  zmq_queue(7).   Requests received using this socket are already properly  tagged  with  postfix  identifying  the original  requester. When sending a reply via XREP socket the message should be tagged with a postfix from a  corresponding request.
+	zmq_dealer: INTEGER_32
+		--A socket of type ZMQ_DEALER is an advanced pattern used for extending request/reply sockets.
+		--Each message sent is round-robined among all connected peers, and each message received is fair-queued from all connected peers.
 
-		-- Compatible peer sockets: ZMQ_REQ, ZMQ_XREQ.
+		-- Deprecated alias: ZMQ_XREQ.
+		-- Compatible peer sockets 	ZMQ_ROUTER, ZMQ_REP, ZMQ_DEALER
 		external
 	                "C inline use <zmq.h>"
 		alias "{
-			 ZMQ_XREP
+			 ZMQ_DEALER
+		}"
+		end
+feature -- Socket Types: Exclusive pair pattern	
+	zmq_pair: INTEGER_32
+		--
+		external
+	                "C inline use <zmq.h>"
+		alias "{
+				ZMQ_PAIR
 		}"
 		end
 
-	zmq_upstream: INTEGER_32 is
-		-- Socket  to  receive messages from up the stream. Messages are
-		-- fair-queued from among all the connected peers. Send function is
-		-- not implemented for this socket type.
+feature -- Socket types: Publish-subscribe pattern 	
+	zmq_pub: INTEGER_32
+		-- A socket type to  distribute  data. Recv fuction is not
+		-- implemented for this socket type.  Messages  are  distributed  in
+		-- fanout fashion to all the peers.
 
-        -- Compatible peer sockets: ZMQ_DOWNSTREAM.
+		-- Compatible peer sockets: ZMQ_SUB.
 		external
 	                "C inline use <zmq.h>"
 		alias "{
-			 ZMQ_UPSTREAM
+	            ZMQ_PUB
 		}"
 		end
 
-	zmq_downstream: INTEGER_32 is
-		-- A socket type to  send messages down stream. Messages are
-		-- load-balanced among all the connected peers. Send function is not
-		-- implemented for this socket type.
+	zmq_sub: INTEGER_32
+		-- A socket type to  subscribe  for  data. Send function is not
+		-- implemented for this socket type. Initially, socket is
+		-- subscribed for  no  messages.  Use ZMQ_SUBSCRIBE option to
+		-- specify which messages to subscribe for.
 
-		-- Compatible peer sockets: ZMQ_UPSTREAM.
+		-- Compatible peer sockets: ZMQ_PUB.
 		external
 	                "C inline use <zmq.h>"
 		alias "{
-			 ZMQ_DOWNSTREAM
+			 ZMQ_SUB
 		}"
 		end
 

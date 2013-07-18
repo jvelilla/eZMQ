@@ -1,11 +1,11 @@
-note
+ï»¿note
 	description: "Summary description for {ZMQ_MESSAGE}."
 	author: ""
 	date: "$Date$"
 	revision: "$Revision$"
 
 class ZMQ_MESSAGE
-	-- ØMQ message
+	-- Ã˜MQ message
 
 	-- Note: current design is a sketch. Most probably we want to make it a generic class allowing data to be of specific types instead of being ANY.
 inherit
@@ -16,16 +16,16 @@ create {ANY} default_create,  with_size, with_string
 
 feature {} -- Creation
 
-	default_create is
-		-- Initialize an empty ØMQ message
+	default_create
+		-- Initialize an empty Ã˜MQ message
 		local res: INTEGER_32
 		do
 			make
 			res:=zmq_msg_init(item)
 		end
 
-	with_size (a_size: NATURAL_32) is
-		-- Initialize a ØMQ message `a_size' bytes long. The implementation
+	with_size (a_size: NATURAL_32)
+		-- Initialize a Ã˜MQ message `a_size' bytes long. The implementation
 		-- chooses whether it is more efficient to store message content on the
 		-- stack (small  messages) or  on  the  heap  (large  messages).
 
@@ -37,7 +37,7 @@ feature {} -- Creation
 	end
 
 --	with (some_data: ANY) is
---		-- Initialize a ØMQ message with `some_data'; the
+--		-- Initialize a Ã˜MQ message with `some_data'; the
 --		-- physical piece of memory is referred by and NOT copied. This means
 --		-- that
 
@@ -62,8 +62,8 @@ feature {} -- Creation
 --		implementation: data=some_data.to_pointer and size=some_data.object_size.to_natural_32
 --	end
 
-	with_string (a_string: STRING) is
-		-- Initialize a ØMQ message with the content of `a_string'; the data is NOT
+	with_string (a_string: STRING)
+		-- Initialize a Ã˜MQ message with the content of `a_string'; the data is NOT
 		-- copied only referred by with a pointer. Current minimalist design of the
 		-- wrapper requires `a_string' at least not to change size during Current
 		-- message lifetime
@@ -82,7 +82,7 @@ feature {} -- Creation
 	end
 feature {ANY} -- Disposing
 
-	delete is
+	delete
 		local rc: INTEGER_32
 		do
 			any_data := Void
@@ -90,7 +90,7 @@ feature {ANY} -- Disposing
 			check rc=0 end
 		end
 
-	close is
+	close
 		local rc: INTEGER_32
 		do
 			rc:=zmq_msg_close(item)
@@ -99,7 +99,7 @@ feature {ANY} -- Disposing
 
 feature {ANY} -- Command
 
-	initialize is
+	initialize
 		-- Initialize message
 	local rc: INTEGER_32
 	do
@@ -113,7 +113,7 @@ feature {ANY} -- Command
 
 feature {ANY} -- Size
 
-	size: NATURAL_32 is
+	size: NATURAL_32
 		-- the size of message content
 
 		-- TODO: shall be like size_t
@@ -121,14 +121,14 @@ feature {ANY} -- Size
 		Result := zmq_msg_size(item)
 	end
 
-	data: POINTER is
+	data: POINTER
 		do
 			Result:=zmq_msg_data(item)
 		end
 
 feature {} -- Implementation
 
-	any_data: ANY is
+	any_data: ANY
 		-- Reference to the data feed at creation time using `with_data'
 		attribute
 	end
@@ -140,7 +140,7 @@ feature {} -- Implementation
 			Result := struct_size
 		end
 
-	struct_size: INTEGER is
+	struct_size: INTEGER 
 		external   "C inline use <zmq.h>"
 		alias "sizeof(zmq_msg_t)"
 		end

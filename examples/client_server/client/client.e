@@ -6,7 +6,7 @@ note
 class CLIENT
 create make
 feature
-	make is
+	make 
 		local context: ZMQ_CONTEXT; socket: ZMQ_SOCKET; message, answer: ZMQ_MESSAGE
 			answer_text: STRING
 		do

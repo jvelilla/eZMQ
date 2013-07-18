@@ -13,7 +13,7 @@ inherit
 
 feature -- Initialization
 
-	make (a_item: POINTER) is
+	make (a_item: POINTER)
 			-- Create.
 		do
 			item := a_item
@@ -21,7 +21,7 @@ feature -- Initialization
 
 feature -- Destruction
 
-	dispose is
+	dispose
 			-- Delete C object.
 		do
 			delete (item)
@@ -34,7 +34,7 @@ feature {WRAPPER_BASE} -- C object
 
 feature {NONE} -- C methods
 
-	delete (a_object: POINTER) is
+	delete (a_object: POINTER) 
 			-- Delete c object
 		deferred
 		end
